@@ -62,6 +62,7 @@ const golfcourses = [
 // Scorecards
 const scorecards = [
   {
+    id: "1",
     golfCourse: "1",
     players: [
       {
@@ -187,4 +188,4 @@ const players = [
   },
 ];
 
-module.exports = { golfcourses, players };
+module.exports = { golfcourses, players, scorecards };

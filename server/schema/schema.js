@@ -1,4 +1,4 @@
-const { golfcourses } = require("./sampleData");
+const { golfcourses, scorecards } = require("./sampleData");
 const GolfCourse = require("../models/GolfCourse");
 
 const { Kind } = require("graphql/language");
@@ -13,6 +13,7 @@ const {
   GraphQLScalarType,
 } = require("graphql");
 
+// Golf Course Type
 const GolfCourseType = new GraphQLObjectType({
   name: "GolfCourse",
   fields: () => ({
@@ -41,6 +42,32 @@ const HoleType = new GraphQLObjectType({
   }),
 });
 
+// Scorecard Type
+const ScorecardType = new GraphQLObjectType({
+  name: "Scorecard",
+  fields: () => ({
+    id: { type: GraphQLID },
+    golfCourse: { type: GolfCourseType },
+    players: { type: GraphQLList(PlayerType) },
+  }),
+});
+
+const PlayerType = new GraphQLObjectType({
+  name: "Player",
+  fields: () => ({
+    name: { type: GraphQLString },
+    scores: { type: GraphQLList(ScoreType) },
+  }),
+});
+
+const ScoreType = new GraphQLObjectType({
+  name: "Score",
+  fields: () => ({
+    hole: { type: GraphQLInt },
+    strokes: { type: GraphQLInt },
+  }),
+});
+
 const RootQuery = new GraphQLObjectType({
   name: "RooQueryType",
   fields: {
@@ -52,13 +79,22 @@ const RootQuery = new GraphQLObjectType({
         return golfcourses.find((course) => course.id === args.id);
       },
     },
-    // All players
+    // All golf courses
     golfcourses: {
       type: new GraphQLList(GolfCourseType),
       resolve(parentVal, args) {
         return golfcourses;
       },
     },
+    // Scorecard by id
+    scorecard: {
+      type: ScorecardType,
+      args: { id: { type: GraphQLID } },
+      resolve(parentVal, args) {
+        return scorecards.find((scorecard) => scorecard.id === args.id);
+      },
+    },
+    // All Scorecards
   },
 });
 
