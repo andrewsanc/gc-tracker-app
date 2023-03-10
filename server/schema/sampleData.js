@@ -63,7 +63,8 @@ const golfcourses = [
 const scorecards = [
   {
     id: "1",
-    golfCourse: "1",
+    name: "Practice game",
+    golfCourseId: "1",
     players: [
       {
         name: "Tiger Woods",

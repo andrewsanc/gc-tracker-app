@@ -47,7 +47,15 @@ const ScorecardType = new GraphQLObjectType({
   name: "Scorecard",
   fields: () => ({
     id: { type: GraphQLID },
-    golfCourse: { type: GolfCourseType },
+    name: { type: GraphQLString },
+    golfCourse: {
+      type: GolfCourseType,
+      resolve(parent, args) {
+        return golfcourses.find(
+          (golfcourse) => golfcourse.id === parent.golfCourseId
+        );
+      },
+    },
     players: { type: GraphQLList(PlayerType) },
   }),
 });
