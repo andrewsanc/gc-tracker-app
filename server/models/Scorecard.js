@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const ScorecardSchema = Schema(
   {
     name: { type: String, required: true },
-    golfCourse: {
+    golfCourseId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "GolfCourse",
       required: true,

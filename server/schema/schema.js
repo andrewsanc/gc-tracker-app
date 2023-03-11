@@ -1,7 +1,7 @@
 const { golfcourses, scorecards } = require("./sampleData");
 const GolfCourse = require("../models/GolfCourse");
+const Scorecard = require("../models/Scorecard");
 
-const { Kind } = require("graphql/language");
 const {
   GraphQLObjectType,
   GraphQLID,
@@ -50,10 +50,8 @@ const ScorecardType = new GraphQLObjectType({
     name: { type: GraphQLString },
     golfCourse: {
       type: GolfCourseType,
-      resolve(parent, args) {
-        return golfcourses.find(
-          (golfcourse) => golfcourse.id === parent.golfCourseId
-        );
+      resolve(parentVal, args) {
+        return GolfCourse.findById(parentVal.golfCourseId);
       },
     },
     players: { type: GraphQLList(PlayerType) },
@@ -80,18 +78,19 @@ const RootQuery = new GraphQLObjectType({
   name: "RooQueryType",
   fields: {
     // Golf course by id
-    golfcourse: {
+    golfCourse: {
       type: GolfCourseType,
       args: { id: { type: GraphQLID } },
       resolve(parentVal, args) {
-        return golfcourses.find((course) => course.id === args.id);
+        console.log(args.id);
+        return GolfCourse.findById(args.id);
       },
     },
     // All golf courses
-    golfcourses: {
+    golfCourses: {
       type: new GraphQLList(GolfCourseType),
       resolve(parentVal, args) {
-        return golfcourses;
+        return GolfCourse.find();
       },
     },
     // Scorecard by id
@@ -99,10 +98,16 @@ const RootQuery = new GraphQLObjectType({
       type: ScorecardType,
       args: { id: { type: GraphQLID } },
       resolve(parentVal, args) {
-        return scorecards.find((scorecard) => scorecard.id === args.id);
+        return Scorecard.findById(args.id);
       },
     },
     // All Scorecards
+    scorecards: {
+      type: new GraphQLList(ScorecardType),
+      resolve(parentVal, args) {
+        return Scorecard.find();
+      },
+    },
   },
 });
 
